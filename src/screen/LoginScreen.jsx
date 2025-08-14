@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -31,31 +32,56 @@ const LoginScreen = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSignIn = () => {
-    if (validateForm()){
+  const handleSignIn = async () => {
+    if (validateForm()) {
       console.log('Submitted', email, password);
       setEmail('');
       setPassword('');
       setError({});
+      try {
+        await AsyncStorage.setItem('userLoggedIn', 'true');
+        navigation.navigate('Home');
+      } catch (error) {
+        console.log('Error saving login status:', error);
+      }
+      navigation.navigate('Home');
     }
-  }
+  };
 
   // const handleSignIn = () => {
   //   console.log('Sign in button pressed');
   //   navigation.navigate('Signup');
   // };
 
-const handleRegister = () => {
-  alert('Create pressed!');
-  navigation.navigate('Signup');
-};
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const loginStatus = await AsyncStorage.getItem('userLoggedIn');
+        if (loginStatus === 'true') {
+          navigation.navigate('Home');
+        }
+      } catch (error) {
+        console.log('Error reading login status:', error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  const handleRegister = () => {
+    alert('Create pressed!');
+    navigation.navigate('Signup');
+  };
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         {/* Top Image */}
         <View style={styles.topImageContainer}>
-          <Image source={require('../assets/topVector.png')} style={styles.topImage} />
+          <Image
+            source={require('../assets/topVector.png')}
+            style={styles.topImage}
+          />
         </View>
 
         {/* Hello Text */}
@@ -67,7 +93,12 @@ const handleRegister = () => {
 
         {/* Email Input */}
         <View style={styles.inputContainer}>
-          <FontAwesome name="user" size={24} color="#9A9A9A" style={styles.inputIcon} />
+          <FontAwesome
+            name="user"
+            size={24}
+            color="#9A9A9A"
+            style={styles.inputIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Email"
@@ -76,13 +107,18 @@ const handleRegister = () => {
           />
         </View>
 
-        {
-          error.email ? <Text style={styles.errorText}>{error.email}</Text> : null
-        }
+        {error.email ? (
+          <Text style={styles.errorText}>{error.email}</Text>
+        ) : null}
 
         {/* Password Input */}
         <View style={styles.inputContainer}>
-          <Fontisto name="locked" size={24} color="#9A9A9A" style={styles.inputIcon} />
+          <Fontisto
+            name="locked"
+            size={24}
+            color="#9A9A9A"
+            style={styles.inputIcon}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Password"
@@ -92,10 +128,9 @@ const handleRegister = () => {
           />
         </View>
 
-        {
-          error.password ? <Text style={styles.errorText}>{error.password}</Text> : null
-        }
-
+        {error.password ? (
+          <Text style={styles.errorText}>{error.password}</Text>
+        ) : null}
 
         {/* Forgot Password */}
         <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
@@ -111,16 +146,31 @@ const handleRegister = () => {
         </Pressable> */}
 
         <View style={styles.signInButtonContainer}>
-  <Pressable onPress={handleSignIn} style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}>
-    <Text style={styles.signin}>Sign in</Text>
-  </Pressable>
-  <Pressable onPress={handleSignIn} style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1, marginLeft: 10 }]}>
-    <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-      <AntDesign name="arrowright" size={24} color="white" style={styles.inputIcon} />
-    </LinearGradient>
-  </Pressable>
-</View>
-
+          <Pressable
+            onPress={handleSignIn}
+            style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+          >
+            <Text style={styles.signin}>Sign in</Text>
+          </Pressable>
+          <Pressable
+            onPress={handleSignIn}
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.6 : 1, marginLeft: 10 },
+            ]}
+          >
+            <LinearGradient
+              colors={['#F97794', '#623AA2']}
+              style={styles.linearGradient}
+            >
+              <AntDesign
+                name="arrowright"
+                size={24}
+                color="white"
+                style={styles.inputIcon}
+              />
+            </LinearGradient>
+          </Pressable>
+        </View>
 
         {/* Register Link */}
         {/* <TouchableOpacity onPress={handleRegister}>
@@ -130,12 +180,13 @@ const handleRegister = () => {
           </Text>
         </TouchableOpacity> */}
         <Text style={styles.footerText}>
-  Don't have an account?{' '}
-  <TouchableOpacity onPress={handleRegister}>
-    <Text style={{ textDecorationLine: 'underline', fontSize: 16 }}>Create</Text>
-  </TouchableOpacity>
-</Text>
-
+          Don't have an account?{' '}
+          <TouchableOpacity onPress={handleRegister}>
+            <Text style={{ textDecorationLine: 'underline', fontSize: 16 }}>
+              Create
+            </Text>
+          </TouchableOpacity>
+        </Text>
 
         {/* Bottom Image */}
         {/* <View style={styles.leftVectorContainer}>

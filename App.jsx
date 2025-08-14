@@ -6,12 +6,18 @@ import { StackScreen } from 'react-native-screens';
 import LoginScreen from './src/screen/LoginScreen';
 import SignUpScreen from './src/screen/SignupScreen';
 import HomeScreen from './src/screen/HomeScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
+import BottomTabs from './src/BottomTabs';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  return (
+  return ( 
+    <SafeAreaProvider>
+   <StatusBar barStyle={'dark-content'}/>
     <NavigationContainer>
+      
       <Stack.Navigator 
         screenOptions={{
           headerShown: false,
@@ -20,10 +26,15 @@ const App = () => {
         initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Signup" component={SignUpScreen}/>
-        <Stack.Screen name="Home" component={HomeScreen}/>
+        <Stack.Screen name="Home" component={BottomTabs}/>
+
       </Stack.Navigator>
+      
 
     </NavigationContainer>
+  
+    </SafeAreaProvider>
+
   )
 }
 

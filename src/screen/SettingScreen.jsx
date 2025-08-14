@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const ProfileScreen = () => {
+const SettingScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to the Home Screen!</Text>
@@ -10,7 +10,7 @@ const ProfileScreen = () => {
   );
 };
 
-export default ProfileScreen;
+export default SettingScreen;
 
 const styles = StyleSheet.create({
   container: {
