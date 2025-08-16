@@ -40,11 +40,11 @@ const LoginScreen = () => {
       setError({});
       try {
         await AsyncStorage.setItem('userLoggedIn', 'true');
-        navigation.navigate('Home');
+        navigation.navigate('Dashboard');
       } catch (error) {
         console.log('Error saving login status:', error);
       }
-      navigation.navigate('Home');
+      navigation.navigate('Dashboard');
     }
   };
 
@@ -58,7 +58,7 @@ const LoginScreen = () => {
       try {
         const loginStatus = await AsyncStorage.getItem('userLoggedIn');
         if (loginStatus === 'true') {
-          navigation.navigate('Home');
+          navigation.navigate('Dashboard');
         }
       } catch (error) {
         console.log('Error reading login status:', error);

@@ -8,7 +8,10 @@ import SignUpScreen from './src/screen/SignupScreen';
 import HomeScreen from './src/screen/HomeScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
-import BottomTabs from './src/BottomTabs';
+import Header from './src/components/Header';
+import Dashboard from './src/screen/dashboard/Dashboard';
+import StoryView from './src/components/StoryView';
+import BottomNavigation from './src/navigator/BottomNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +29,9 @@ const App = () => {
         initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Signup" component={SignUpScreen}/>
-        <Stack.Screen name="Home" component={BottomTabs}/>
+        <Stack.Screen name="Home" component={Dashboard}/>
+        <Stack.Screen name="Story" component={StoryView}/>
+        <Stack.Screen name="Dashboard" component={BottomNavigation}/>
 
       </Stack.Navigator>
       
